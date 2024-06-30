@@ -1,4 +1,5 @@
 #pragma once
+#include <conio.h>
 #include "Course.cpp"
 #include "Programming.cpp"
 #include "Design.cpp"
@@ -6,7 +7,7 @@ using namespace std;
 
 class Protect {
 public:
-
+ 
     // Check if ID is less than Zero or ID in letter
     static void validateId(int id) {
         if (cin.fail() || id <= 0) {
@@ -58,7 +59,7 @@ public:
     static bool askToAddMore() {
         char choice;
         while (true) {
-            std::cout << "\nDo you want to make more (y/n)? ";
+            std::cout << "\nDo you want to make more? (y/n): ";
             std::cin >> choice;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
 
@@ -125,13 +126,13 @@ public:
         int choice;
         do{
             cout <<design<<endl;
-            cout <<"\t1. Graphic and Design."<<endl;
-            cout <<"\t2. Adobe Photoshop."<<endl;
-            cout <<"\t3. Video Editing."<<endl;
-            cout <<"\t4. 3D Motion."<<endl;
-            cout <<"\t5. UX/UI Design."<<endl;
-            cout <<"\t0. Exit"<<endl;
-            cout <<"\tEnter your choice<0-5>: ";
+            cout <<"1. Graphic and Design."<<endl;
+            cout <<"2. Adobe Photoshop."<<endl;
+            cout <<"3. Video Editing."<<endl;
+            cout <<"4. 3D Motion."<<endl;
+            cout <<"5. UX/UI Design."<<endl;
+            cout <<"0. Exit"<<endl;
+            cout <<"Enter your choice<0-5>: ";
             cin >> choice;
             switch(choice){
                 case 1 : return "Graphic and Design.";
@@ -150,6 +151,12 @@ public:
                         break;
             }
         }while(choice != 0);
+    }
+
+    // Wait for press key
+    static void waitForKeypress() {
+        std::cout << "\nPress any key to continue..." << std::endl;
+        _getch();  // Waits for a key press
     }
 
 };

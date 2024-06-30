@@ -3,11 +3,13 @@
 #include "Protect.cpp"
 using namespace std;
 
-class Implementation2 {
+class Implementation2 { 
 public: 
         void run2(){
+            enum Option{ADD = 1, VIEW, UPDATE, DELETE, SAVE , LOAD, EXIT};
+            enum Option2{PROGRAM = 1, DESIGN, BACK = 0};
             CourseManager manager("courses.dat");
-            char choice;
+            int choice;
                 do{
                     cout << "\nMenu:\n";
                     cout << "1. Add Course\n";
@@ -19,10 +21,11 @@ public:
                     cout << "7. Exit\n";
                     cout << "\nEnter your choice: ";
                     cin >> choice;
+                    system("cls");
 
                 try{
                     switch(choice) {
-                        case '1': { 
+                        case ADD: {      
                                 string name, project, tools;
                                 int id;
                                 double duration; 
@@ -35,8 +38,9 @@ public:
                                 cout <<endl;
                                 cout <<"\nEnter your choice<0-2>: ";
                                 cin  >> choice;
+                                system("cls");
                                 switch(choice){
-                                    case '1': 
+                                    case PROGRAM: 
                                           do{
                                                 name = Protect::inputProgram("Select course: ");
                                                 duration = Protect::getDoubleInput("Enter Duration: ");
@@ -45,8 +49,9 @@ public:
                                                 Protect::validateId(id);
                                                 manager.addCourse(new Programming(name, id, duration, project));
                                           }while(Protect::askToAddMore());
+                                          system("cls");
                                             break;
-                                    case '2':
+                                    case DESIGN:
                                            do{
                                                 name = Protect::inputDesignCourse("Select course: ");
                                                 duration = Protect::getDoubleInput("Enter Duration: ");
@@ -54,35 +59,40 @@ public:
                                                 id = Protect::getIntInput("Enter ID: ");
                                                 manager.addCourse(new Design(name, id, duration, tools));
                                            }while(Protect::askToAddMore());
-                                    case '0':
-                                            cout <<"Back to Menu."<<endl;
+                                           system("cls");
+                                    case BACK:
+                                            cout <<"You are exiting..."<<endl;
+                                            Protect::waitForKeypress();
+                                            system("cls");
                                             break;
                                     default : cout <<"Invalid choice!"<<endl; 
                                             break;
                                 }
               
-                            }while(choice != '0');
+                            }while(choice != BACK); 
                             break;           
                         }
-                        case '2':
-                                cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Courses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;                                    
+                        case VIEW:     
+                                // cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Courses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;                                    
                                 manager.viewCourses();
+                                Protect::waitForKeypress();
+                                system("cls");
                                 break;
-                        case '3':{
+                        case UPDATE:{     
                                 int id;
                                 cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Update Courses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;
-                                // manager.viewCourses();
                                 cout <<"\nAccess update specify by ID: "<<endl;
                             do{ 
                                 id = Protect::getIntInput("Enter ID: ");
                                 Protect::validateId(id);
                                 manager.updateCourse(id);
-
-                            }while(Protect::askToAddMore()); 
+                                cout << "\nCourse Update successfully." << endl;
+                            }while(Protect::askToAddMore());
+                            system("cls"); 
                                 break;
                             } 
                           
-                        case '4':{
+                        case DELETE:{   
                                 int id;
                                     cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Delete Courses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;
                                  do{
@@ -90,25 +100,32 @@ public:
                                     cout << "\nEnter Course ID to delete: ";
                                     cin >> id;
                                     manager.deleteCourse(id);
-                                }while(Protect::askToAddMore());    
+                                }while(Protect::askToAddMore());
+                                system("cls");    
                                     break;
                             } 
-                        case '5': manager.saveToFile("Course.dat");
+                        case SAVE: manager.saveToFile("Course.dat");
+                                Protect::waitForKeypress();
+                                system("cls");  
                                 break;
-                        case '6': manager.loadFromFile("Course.dat");
+                        case LOAD: manager.loadFromFile("Course.dat");
+                                Protect::waitForKeypress();
+                                system("cls");  
                                 break;
-                        case '7':
+                        case EXIT:  
                                 cout << "You are exiting program...\n";
+                                Protect::waitForKeypress();
+                                system("cls");
                                 break;
                         default:
                                 throw std::invalid_argument("Invalid choice! Please enter again.\n");
                                 break;
 
-                    }
+                    } 
 
                 }catch (const std::exception& e) {
                     std::cout << "\nError: " << e.what() << std::endl;
                 }
-             }while(choice != '7');
+             }while(choice != EXIT);
         }
 };

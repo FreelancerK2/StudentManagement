@@ -1,1 +1,2 @@
-Graduate,Len,Somnang,21/10/2000,105,Student
+Graduate,Len,Somnang,21/10/2000,102,Bank
+Undergraduate,Lin,Tibo,15/2/2001,103,Cybersecurity

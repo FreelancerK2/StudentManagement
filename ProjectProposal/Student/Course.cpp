@@ -21,7 +21,7 @@ public:
 
     // Function to display Course details
     virtual void displayInfo() const {
-        std::cout <<setw(20)<< courseName <<setw(12)<< courseID<<setw(12)<<duration<<setw(25)<<getType()<<setw(25);
+        std::cout <<setw(18)<< courseName <<setw(12)<< courseID<<setw(14)<<duration<<setw(25)<<getType()<<setw(25);
     } 
 
     // Function write to file

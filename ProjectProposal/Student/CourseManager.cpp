@@ -25,7 +25,7 @@ public:
        // default constructor
        CourseManager(const std::string& filename) : filename(filename) {
     }
-
+ 
     // Function to add more course
     void addCourse(Course* course) {
         if (isDuplicateId(course->getCourseID())) {
@@ -37,23 +37,55 @@ public:
         }
     }
 
-    // Function to Display all course
-    void viewCourses() override {                                                                                                
-        cout <<"No."<< setw(11) << "Name" << setw(19) << "CourseID" << setw(20) << "Duration(Years)"<< setw(15) <<"Type" << setw(28) << "Project/Tools"<< endl;
-        cout << string(97, '-') << endl;
-        // Check for valid input
-        if (courses.empty()) {
-            throw std::invalid_argument("No courses available");
-            return;
-        } 
-        int i = 1;     // applies a given function to each element in a range.
-        std::for_each(courses.begin(), courses.end(), [&i](Course* course) {
-        cout <<i++;
-        course->displayInfo();
-        }); 
+    // View all students
+    void viewCourses(){
+    enum option{PROGRAM = 1 , DESIGN, EXIT = 0};
+    int choice;
+    int i =1;
+    std::cout << "Choose a course to view:\n1. Programming\n2. Design\n0. Exit\nEnter your choice<0-2>: ";
+    std::cin >> choice;
+    cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Course ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;
+    cout <<"No."<< setw(11) << "Name" << setw(19) << "CourseID" << setw(20) << "Duration(Years)"<< setw(15) <<"Type" << setw(28) << "Project/Tools"<< endl;
+    cout << string(97, '-') << endl;
+
+    if (courses.empty()) {
+        throw std::invalid_argument("No courses available");
+        return;
+    } 
+
+    switch (choice) {
+        case PROGRAM:
+            for (auto course : courses) {
+            Programming* program = dynamic_cast<Programming*>(course);
+                if (program != nullptr) {
+                    cout <<i;
+                    course->displayInfo();
+                    i++;
+                }
+            }
+            break;
+        case DESIGN:
+            for (auto course : courses) {
+            Design* design = dynamic_cast<Design*>(course);
+                if (design != nullptr) {
+                    cout <<i;
+                    course->displayInfo();;
+                    i++;
+                }
+            }
+            break;
+        case EXIT: cout <<"You Exiting..."<<endl;
+            Secure::waitForKeypress();
+            system("cls");
+            break;
+        default:
+            std::cout << "Invalid choice." << std::endl;
+       }
     }
+
     // Function to update course
     void updateCourse(int id) {
+    enum UpdateOption{NAME = 1, DURATION, ID, OTHER, EXIT = 0};
     auto it = findCourseById(id);
         if (it != courses.end()) {
             std::cout << "Which item do you want to update?\n"
@@ -70,23 +102,23 @@ public:
             std::cin >> choice;
 
             switch (choice) {
-                case 1: {
+                case NAME: {
                     std::string newName = Protect::getStringInput("Enter new name: ");
                     (*it)->setName(newName);
                     break;
                 } 
-                case 2: {
+                case DURATION: {
                     double newDuration = Protect::getDoubleInput("Enter new duration: ");
                      (*it)->setDuration(newDuration);
                     break;
                 }
-                case 3: {
+                case ID: {
                     int newId = Protect::getIntInput("Enter new ID: ");
                     Protect::validateId(id);
                     (*it)->setId(newId);
                     break;
                 }
-                case 4: {
+                case OTHER: {
                     if (program) {   
                         std::string newProject = Protect::getStringInput("Enter new Project: ");
                         program->setProject(newProject);
@@ -95,7 +127,7 @@ public:
                         design->setTools(newTools);
                     }
                     break;
-                case 0: cout <<"\n Exit update."<<endl;
+                case EXIT: cout <<"\n Exit update."<<endl;
                     break;
                 }
                 default: 
@@ -113,7 +145,7 @@ public:
         // Execute if encounter ID
         if (it != courses.end()) {
             char response;
-            std::cout << "You are going to delete Course with ID: " << id << "? (yes/no): ";
+            std::cout << "You are going to delete Course with ID: " << id << "? (y/n): ";
             std::cin >> response;
             response = std::tolower(static_cast<unsigned char>(response));
             response == 'y' ? courses.erase(it, courses.end()), std::cout << "\nCourse deleted successfully.\n" : std::cout << "Deletion cancelled.\n";

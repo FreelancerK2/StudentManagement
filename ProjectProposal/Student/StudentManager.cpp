@@ -35,25 +35,57 @@ public:
         }
     } 
 
-    // View all students
-    void viewStudents() override {                      
-        cout <<"No."<< setw(11) << "Name" << setw(19) << "date of birth" << setw(15) << "Student ID"<< setw(18) <<"Type" << setw(30) << "Major/Research Topic"<< endl;
-        cout << string(97, '-') << endl;
 
-        if (students.empty()) {
-            throw std::invalid_argument("No student available");
-            return;
-        }
-         
-        int i = 1;    // applies a given function to each element in a range.
-        std::for_each(students.begin(), students.end(), [&i](Student* student) {
-        cout <<i++;
-        student->displayDetails();
-        });
-    } 
+    // View all students
+    void viewStudents(){
+    enum option{GRADUATE = 1 , UNDERGRADUATE, EXIT = 0};
+    int choice;
+    int i =1;
+    std::cout << "Choose a student to view:\n1. Graduate\n2. Undergraduate\n0. Exit\nEnter your choice<0-2>: ";
+    std::cin >> choice;
+    cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Student ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;
+    cout <<"No."<< setw(11) << "Name" << setw(19) << "date of birth" << setw(15) << "Student ID"<< setw(18) <<"Type" << setw(30) << "Major/Research Topic"<< endl;
+    cout << string(97, '-') << endl;
+
+    if (students.empty()) {
+        throw std::invalid_argument("No student available");
+        return;
+    }
+
+
+    switch (choice) {
+        case GRADUATE:
+            for (auto student : students) {
+            Graduate* graduate = dynamic_cast<Graduate*>(student);
+                if (graduate != nullptr) {
+                    cout <<i;
+                    student->displayDetails();
+                    i++;
+                }
+            }
+            break;
+        case UNDERGRADUATE:
+            for (auto student : students) {
+            Undergraduate* undergraduate = dynamic_cast<Undergraduate*>(student);
+                if (undergraduate != nullptr) {
+                    cout <<i;
+                    student->displayDetails();;
+                    i++;
+                }
+            }
+            break;
+        case EXIT: cout <<"You Exiting..."<<endl;
+            Secure::waitForKeypress();
+            system("cls");
+            break;
+        default:
+            std::cout << "Invalid choice." << std::endl;
+       }
+    }
 
     // Function to update course
     void updateStudent(const int& id) {
+    enum Option{FIRSTNAME = 1, LASTNAME, DATE, ID, OTHER, EXIT = 0};
     auto it = findStudentById(id);
         if (it != students.end()) {
             std::cout << "Which item do you want to update?\n"
@@ -70,28 +102,28 @@ public:
             std::cin >> choice;
 
             switch (choice) {
-                case 1: {
+                case FIRSTNAME: {
                     std::string newFirstName = Secure::getStringInput("Enter new Firstname: ");
                     (*it)->setFirstName(newFirstName);
                     break;
                 }
-                case 2: {
+                case LASTNAME: {
                     std::string newLastName = Secure::getStringInput("Enter new Lastname: ");
                     (*it)->setLastName(newLastName);
                     break;
                 }
-                case 3: {
+                case DATE: {
                     string date = Secure::validateAge();
                     (*it)->setDob(date);
                     break;
                 }
-                case 4: {
+                case ID: {
                     int newId = Secure::getIntInput("Enter new ID: ");
                     Secure::validateId(newId); // Check ID less than Zero and ID in letter
                     (*it)->setID(newId);
-                    break;
+                    break; 
                 } 
-                case 5: {
+                case OTHER: {
                     if (undergraduate) {   
                         std::string newMajor = Secure::getStringInput("Enter new Major: ");
                         undergraduate->setMajor(newMajor);
@@ -100,7 +132,7 @@ public:
                         graduate->setResearchTopic(newTopic);
                     }
                     break;
-                case 0: cout <<"\nExit update."<<endl;
+                case EXIT: cout <<"\nExit update."<<endl;
                     break;
                 }
                 default:
@@ -111,17 +143,17 @@ public:
         }
     } 
 
-    // function to delete student
+    // function to delete student 
     void deleteStudent(const int& id) override {
         auto it = std::remove_if(students.begin(), students.end(), [id](Student* student) {
             return student->getStudentID() == id;
         });
         if (it != students.end()) {
             char response;
-            std::cout << "You are going to delete Student with ID: " << id << "? (yes/no): ";
+            std::cout << "You are going to delete Student with ID: " << id << "? (y/n): ";
             std::cin >> response;
             response = std::tolower(static_cast<unsigned char>(response));
-            response == 'y' ? students.erase(it, students.end()), std::cout << "\nStudent deleted successfully.\n" : std::cout << "Deletion cancelled.\n";
+            response == 'y' ? students.erase(it, students.end()), std::cout << "\nStudent deleted successfully.\n" : std::cout << "\nDeletion cancelled.\n";
         } else {
             std::cout << "Student with ID " << id << " not found.\n";
         }

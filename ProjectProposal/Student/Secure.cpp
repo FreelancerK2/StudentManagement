@@ -2,7 +2,10 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
+#include <conio.h>
 #include "Student.cpp"
+// #include "Undergraduate.cpp"
+// #include "Graduate.cpp"
 using namespace std;
 
 class Secure {
@@ -103,11 +106,11 @@ public:
         return input;
     }
 
-    // Ask user to repeat action
+    // Ask user to repeat action 
     static bool askToAddMore() {
         char choice;
         while (true) {
-            std::cout << "\nDo you want to make more (y/n)? ";
+            std::cout << "\nDo you want to make more ? (y/n): ";
             std::cin >> choice;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
 
@@ -134,5 +137,11 @@ public:
         if (cin.fail() || id <= 0) {
             throw std::invalid_argument("ID must be a positive integer.");
         }
+    }
+
+    // Wait for press key
+    static void waitForKeypress() {
+        std::cout << "\nPress any key to continue..." << std::endl;
+        _getch();  // Waits for a key press
     }
 };

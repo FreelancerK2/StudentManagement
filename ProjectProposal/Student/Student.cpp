@@ -20,7 +20,7 @@ public:
     virtual void displayDetails(){
         cout << setw(15) << Secure::concatStrings(firstName,lastName) << setw(15) << dob << setw(14) << studentID << setw(24) << getType()<<setw(27);
     }
-
+ 
     // Function GetType Course
     virtual string getType() const = 0;
 
