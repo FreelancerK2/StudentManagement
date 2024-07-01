@@ -8,6 +8,8 @@
 #include "Implementation2.cpp"  
 #include "User.cpp"
 #include "Secure.cpp"
+#define RESET   "\033[0m"
+#define BOLDRED "\033[1m\033[31m"
 
 class AuthenticationSystem {
 private:
@@ -131,10 +133,10 @@ public:
                         Secure::waitForKeypress();
                         system("cls");
                         break;
-                default : cout <<"Invalid choice."<<endl;
+                default : throw invalid_argument("Invalid choice.");
             }
             }catch (const std::exception& e) {
-            std::cout << "Error: " << e.what() << std::endl;
+            std::cout<< BOLDRED << "Error: " << e.what() << RESET << std::endl;
         }
         }while(choice != EXIT);
     }
@@ -150,7 +152,7 @@ public:
             cout << "0. Exit\n";
             cout << "Enter choice: ";
             cin >> choice;
-
+            system("cls");
             switch (choice) {
             case LOGIN: 
                 login();
@@ -161,7 +163,7 @@ public:
             case EXIT: cout <<"\nLog out."<<endl;
                 break;
             default:
-                cout << "Invalid choice, please try again." << endl;
+                cout<< BOLDRED << "\nError: Invalid choice, please try again."<< RESET << endl;
             }
         } while (choice != EXIT);
     }

@@ -3,17 +3,12 @@
 #include "Course.cpp"
 #include "Programming.cpp"
 #include "Design.cpp"
+#define RESET   "\033[0m"
+#define BOLDRED "\033[1m\033[31m"
 using namespace std;
 
 class Protect {
 public:
- 
-    // Check if ID is less than Zero or ID in letter
-    static void validateId(int id) {
-        if (cin.fail() || id <= 0) {
-            throw std::invalid_argument("ID must be a positive integer.");
-        }
-    }
 
     // Function to input integer
     static int getIntInput(const std::string& prompt) {
@@ -25,6 +20,11 @@ public:
             std::cout << "Invalid input."<<endl;
             cout <<prompt;
         } 
+        if (cin.fail() || input <= 0) {
+            cout << BOLDRED <<"Invalid input. Please input in positive number!"<<RESET<<endl;
+            cout <<prompt;
+            cin >> input;
+        }
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return input;
     }  
@@ -34,19 +34,19 @@ public:
         std::string input;
         std::cout << prompt;
         cin >> input;
-
         std::regex numberPattern("[0-9]"); // Regex to match any digit
+
         while (input.length() <= 1 || std::regex_search(input, numberPattern)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            throw invalid_argument ("Invalid input. ");
+            cout <<BOLDRED << " Invalid input."<< RESET <<endl;
             cout <<prompt;
             cin >> input;
             // Check if the input contains any numbers
             if (std::regex_search(input, numberPattern)) {
-                std::cout << "The string should not contain numbers! ";
+                cout << BOLDRED <<"Error : The string should not contain numbers! "<< RESET;
             } else if(input.length() <= 1){
-                std::cout <<"The string length not less than one or equal once! ";
+                cout << BOLDRED <<"Error : The string length not less than one or equal once! "<< RESET;
             }else{
                 break;
             } 
@@ -71,10 +71,10 @@ public:
             } else if (choice == 'n') {
                 return false;
             } else {
-                std::cout << "Invalid input! Please enter 'y' or 'n'." << std::endl;
+                cout << BOLDRED << "Invalid input! Please enter 'y' or 'n'."<< RESET <<endl;
             }
         }
-    }
+    } 
 
     // Function to input double
     static double getDoubleInput(const std::string& prompt) {
@@ -83,7 +83,7 @@ public:
         while (!(std::cin >> value)) {
             std::cin.clear(); // Clear the error flag
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore invalid input
-            std::cout << "Invalid input.Please input only Number!"<<endl;
+            std::cout<< BOLDRED << "Invalid input. Please input only Number!"<< RESET <<endl;
             cout<<prompt;
         } 
         return value;
@@ -115,7 +115,7 @@ public:
                         break;
                 case 0 : return "Exit";
                         break;
-                default: return "Invalid Input";
+                default: throw invalid_argument("Invalid input. Please input number 0-5.");
                         break;
             }
         }while(choice != 0);
@@ -147,7 +147,7 @@ public:
                         break;
                 case 0 : return "Exit";
                         break;
-                default: return "Invalid Input";
+                default: throw invalid_argument("Invalid input. Please input number 0-5.");
                         break;
             }
         }while(choice != 0);

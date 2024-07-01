@@ -1,6 +1,8 @@
 #pragma once
 #include "CourseManager.cpp"
 #include "Protect.cpp"
+#define RESET   "\033[0m"
+#define BOLDRED "\033[1m\033[31m"
 using namespace std;
 
 class Implementation2 { 
@@ -40,13 +42,12 @@ public:
                                 cin  >> choice;
                                 system("cls");
                                 switch(choice){
-                                    case PROGRAM: 
+                                    case PROGRAM:  
                                           do{
                                                 name = Protect::inputProgram("Select course: ");
                                                 duration = Protect::getDoubleInput("Enter Duration: ");
                                                 project = Protect::getStringInput("Enter Project: ");
                                                 id = Protect::getIntInput("Enter ID: ");
-                                                Protect::validateId(id);
                                                 manager.addCourse(new Programming(name, id, duration, project));
                                           }while(Protect::askToAddMore());
                                           system("cls");
@@ -65,15 +66,14 @@ public:
                                             Protect::waitForKeypress();
                                             system("cls");
                                             break;
-                                    default : cout <<"Invalid choice!"<<endl; 
+                                    default : throw invalid_argument("Invalid choice. Please try again1"); 
                                             break;
                                 }
               
                             }while(choice != BACK); 
                             break;           
                         }
-                        case VIEW:     
-                                // cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Courses ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;                                    
+                        case VIEW:                        
                                 manager.viewCourses();
                                 Protect::waitForKeypress();
                                 system("cls");
@@ -84,7 +84,6 @@ public:
                                 cout <<"\nAccess update specify by ID: "<<endl;
                             do{ 
                                 id = Protect::getIntInput("Enter ID: ");
-                                Protect::validateId(id);
                                 manager.updateCourse(id);
                                 cout << "\nCourse Update successfully." << endl;
                             }while(Protect::askToAddMore());
@@ -118,13 +117,13 @@ public:
                                 system("cls");
                                 break;
                         default:
-                                throw std::invalid_argument("Invalid choice! Please enter again.\n");
+                                throw std::invalid_argument("Invalid choice. Please enter again!");
                                 break;
 
                     } 
 
                 }catch (const std::exception& e) {
-                    std::cout << "\nError: " << e.what() << std::endl;
+                    std::cout<< BOLDRED << "\nError: " << e.what()<< RESET << std::endl;
                 }
              }while(choice != EXIT);
         }

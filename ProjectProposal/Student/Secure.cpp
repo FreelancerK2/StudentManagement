@@ -4,8 +4,8 @@
 #include <vector>
 #include <conio.h>
 #include "Student.cpp"
-// #include "Undergraduate.cpp"
-// #include "Graduate.cpp"
+#define RESET   "\033[0m"
+#define BOLDRED "\033[1m\033[31m"
 using namespace std;
 
 class Secure {
@@ -27,12 +27,12 @@ public:
                         break;
                 case 3 : return "Cybersecurity";
                         break;
-                default : return "Invalid input";
+                default : throw invalid_argument("Invalid input. Please input number 1-3.");
                         break;
             }
         }while(!choice);
     }
-
+ 
     // Method input date
     static string validateAge() {
         int day, month, year;
@@ -57,7 +57,7 @@ public:
                     return to_string(day) + "/" + to_string(month) + "/" + to_string(year);
                 }
             } else {
-                throw invalid_argument ("Invalid input. Please enter date in DD MM YYYY format.");
+                cout << BOLDRED <<"Invalid input. Please enter date in DD MM YYYY format." << RESET<<endl;
             }
         } while (true);
         // Return an empty string (though loop should never exit without valid input)
@@ -72,8 +72,13 @@ public:
         while (!(std::cin >> input)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input."<<endl;
+            cout << BOLDRED << "Invalid input. Please enter only number!"<<RESET<<endl;
             cout <<prompt;
+        }
+        if (cin.fail() || input <= 0) {
+            cout << BOLDRED <<"Invalid input. Please input in positive number!"<<RESET<<endl;
+            cout <<prompt;
+            cin >> input;
         }
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return input;
@@ -85,19 +90,18 @@ public:
         std::cout << prompt;
         cin >> input;
         std::regex numberPattern("[0-9]"); // Regex to match of 10 digit
-
+        
         while (input.length() <= 1 || std::regex_search(input, numberPattern)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. "<<endl;
+            cout <<BOLDRED << " Invalid input."<< RESET <<endl;
             cout <<prompt;
             cin >> input;
-
             // Check if the input contains any numbers
             if (std::regex_search(input, numberPattern)) {
-                std::cout << "The string should not contain numbers! ";
+                cout << BOLDRED <<"Error : The string should not contain numbers! "<< RESET;
             } else if(input.length() <= 1){
-                cout <<"The string length not less than one or equal once! ";
+                cout << BOLDRED <<"Error : The string length not less than one or equal once! "<< RESET;
             }else{
                 break;
             } 
@@ -113,7 +117,6 @@ public:
             std::cout << "\nDo you want to make more ? (y/n): ";
             std::cin >> choice;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear the input buffer
-
             // Convert choice to lowercase to handle 'Y' and 'N'
             choice = std::tolower(static_cast<unsigned char>(choice));
 
@@ -122,7 +125,7 @@ public:
             } else if (choice == 'n') {
                 return false;
             } else {
-                std::cout << "\nInvalid input! Please enter 'y' or 'n'." << std::endl;
+                cout << BOLDRED << "Invalid input! Please enter 'y' or 'n'."<< RESET <<endl;
             }
         }
     }
@@ -130,13 +133,6 @@ public:
     // Combine Firstname and Lastname
     static std::string concatStrings(const std::string &firstName, const std::string &lastName) {
     return firstName + " " + lastName;
-    }
-
-    // Check if ID is less than Zero or ID in letter
-    static void validateId(int id) {
-        if (cin.fail() || id <= 0) {
-            throw std::invalid_argument("ID must be a positive integer.");
-        }
     }
 
     // Wait for press key

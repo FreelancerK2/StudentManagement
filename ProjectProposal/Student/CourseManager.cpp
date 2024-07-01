@@ -29,7 +29,7 @@ public:
     // Function to add more course
     void addCourse(Course* course) {
         if (isDuplicateId(course->getCourseID())) {
-            cout << "Course with ID " << course->getCourseID() << " already exists. Cannot add duplicate." << endl;
+            throw invalid_argument("Course ID already exists. Cannot add duplicate.");
             delete course; // Prevent memory leak
         } else {
             courses.push_back(course);
@@ -44,6 +44,7 @@ public:
     int i =1;
     std::cout << "Choose a course to view:\n1. Programming\n2. Design\n0. Exit\nEnter your choice<0-2>: ";
     std::cin >> choice;
+    system("cls");
     cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Course ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;
     cout <<"No."<< setw(11) << "Name" << setw(19) << "CourseID" << setw(20) << "Duration(Years)"<< setw(15) <<"Type" << setw(28) << "Project/Tools"<< endl;
     cout << string(97, '-') << endl;
@@ -51,7 +52,7 @@ public:
     if (courses.empty()) {
         throw std::invalid_argument("No courses available");
         return;
-    } 
+    }  
 
     switch (choice) {
         case PROGRAM:
@@ -63,7 +64,7 @@ public:
                     i++;
                 }
             }
-            break;
+            break; 
         case DESIGN:
             for (auto course : courses) {
             Design* design = dynamic_cast<Design*>(course);
@@ -79,7 +80,7 @@ public:
             system("cls");
             break;
         default:
-            std::cout << "Invalid choice." << std::endl;
+            throw invalid_argument("Invalid choice. Please enter number from 0-2.");
        }
     }
 
@@ -100,7 +101,6 @@ public:
             }
             int choice;
             std::cin >> choice;
-
             switch (choice) {
                 case NAME: {
                     std::string newName = Protect::getStringInput("Enter new name: ");
@@ -114,7 +114,6 @@ public:
                 }
                 case ID: {
                     int newId = Protect::getIntInput("Enter new ID: ");
-                    Protect::validateId(id);
                     (*it)->setId(newId);
                     break;
                 }
@@ -131,10 +130,10 @@ public:
                     break;
                 }
                 default: 
-                    throw std::invalid_argument("Invalid input.");
+                    throw std::invalid_argument("Invalid input. Pleas enter number 0-4.");
             }
         } else {
-            throw std::invalid_argument("Course not found.\n");
+            throw std::invalid_argument("Course not found. Wrong ID input");
         }
     }
     // Function Delete Course
@@ -150,7 +149,7 @@ public:
             response = std::tolower(static_cast<unsigned char>(response));
             response == 'y' ? courses.erase(it, courses.end()), std::cout << "\nCourse deleted successfully.\n" : std::cout << "Deletion cancelled.\n";
         } else {
-            throw std::invalid_argument("\nCourse not found.\n");
+            throw std::invalid_argument("Course not found. Please try again!");
         }
     } 
     // Function write to file
@@ -186,7 +185,7 @@ public:
             }
             file.close();
         } else {
-            cout << "Unable to open file for reading!" << endl;
+            throw invalid_argument("Unable to open file for reading!");
         }
     }
 

@@ -5,6 +5,8 @@
 #include "Graduate.cpp"
 #include "Undergraduate.cpp"
 #include "StudentManager.cpp"
+#define RESET   "\033[0m"
+#define BOLDRED "\033[1m\033[31m"
 using namespace std;
 
 class Implementation { 
@@ -44,11 +46,10 @@ public:
                                 system("cls");
                                 switch(choice){
                                     case GRADUATE:
-                                        do{
+                                        do{ 
                                             firstName = Secure::getStringInput("Enter Firstname: ");
                                             lastName = Secure::getStringInput("Enter Lastname: ");
                                             id = Secure::getIntInput("Enter ID: ");
-                                            Secure::validateId(id);
                                             date = Secure::validateAge();  
                                             topic = Secure::getStringInput("Enter research Topic: ");                                        
                                             manager.addStudent(new Graduate(firstName, lastName, date, id, topic));
@@ -60,7 +61,6 @@ public:
                                             firstName = Secure::getStringInput("Enter Firstname: ");
                                             lastName = Secure::getStringInput("Enter Lastname: ");
                                             id = Secure::getIntInput("Enter ID: ");
-                                            Secure::validateId(id);
                                             date = Secure::validateAge();  
                                             major = Secure::inputMajor(major);
                                             manager.addStudent(new Undergraduate(firstName, lastName, date, id, major));
@@ -72,7 +72,7 @@ public:
                                             Secure::waitForKeypress();
                                             system("cls");
                                             break;
-                                    default : cout <<"Invalid choice! Please try again."<<endl; 
+                                    default : throw invalid_argument("Invalid choice! Please try again."); 
                                             break;
                                   }
                                 }while(choice != BACK);
@@ -90,7 +90,6 @@ public:
                                     cout <<"\nAccess update specify by ID: "<<endl;
                                  do{
                                     id = Secure::getIntInput("Enter ID: ");
-                                    Secure::validateId(id); 
                                     manager.updateStudent(id);
                                     cout << "\nStudent Update successfully." << endl;
                                 }while(Secure::askToAddMore()); 
@@ -122,11 +121,11 @@ public:
                                 system("cls");
                                 break;
                             default:
-                                cout << "Invalid choice! Please enter again.\n";
+                                throw invalid_argument("Invalid choice. Please enter again!");
                                 break;
                         }
                         } catch (const std::exception& e) {
-                            std::cout << "\nError: " << e.what() << std::endl;
+                            std::cout << BOLDRED << "\nError: " << e.what() << RESET << std::endl;
                         }
                     }while(choice != EXIT);
     }

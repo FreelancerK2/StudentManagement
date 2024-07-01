@@ -26,15 +26,15 @@ public:
 
     // Function to add more Student
     void addStudent(Student* student) {
-        if (isDuplicateId(student->getStudentID())) {
-            cout << "\nStudent with ID " << student->getStudentID() << " already exists. Cannot add duplicate." << endl;
+        if (isDuplicateId(student->getStudentID())) {      // student->getStudentID()
+            throw invalid_argument("Student ID already exists. Cannot add duplicate.");
             delete student; // Prevent memory leak
         } else {
             students.push_back(student);
             cout << "\nStudent added successfully." << endl;
         }
     } 
-
+ 
 
     // View all students
     void viewStudents(){
@@ -43,6 +43,7 @@ public:
     int i =1;
     std::cout << "Choose a student to view:\n1. Graduate\n2. Undergraduate\n0. Exit\nEnter your choice<0-2>: ";
     std::cin >> choice;
+    system("cls");
     cout <<"\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ View Student ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<<endl;
     cout <<"No."<< setw(11) << "Name" << setw(19) << "date of birth" << setw(15) << "Student ID"<< setw(18) <<"Type" << setw(30) << "Major/Research Topic"<< endl;
     cout << string(97, '-') << endl;
@@ -79,7 +80,7 @@ public:
             system("cls");
             break;
         default:
-            std::cout << "Invalid choice." << std::endl;
+           throw invalid_argument("Invalid choice. Please enter number from 0-2.");
        }
     }
 
@@ -100,7 +101,6 @@ public:
             }
             int choice;
             std::cin >> choice;
-
             switch (choice) {
                 case FIRSTNAME: {
                     std::string newFirstName = Secure::getStringInput("Enter new Firstname: ");
@@ -119,7 +119,6 @@ public:
                 }
                 case ID: {
                     int newId = Secure::getIntInput("Enter new ID: ");
-                    Secure::validateId(newId); // Check ID less than Zero and ID in letter
                     (*it)->setID(newId);
                     break; 
                 } 
@@ -136,10 +135,10 @@ public:
                     break;
                 }
                 default:
-                    throw invalid_argument("Invalid choice\n");
+                    throw invalid_argument("Invalid choice. Please enter number 0-5");
             }
         } else {
-            throw invalid_argument ("\nStudent not found.\n");
+            throw invalid_argument ("Student not found. Wrong ID input");
         }
     } 
 
@@ -155,7 +154,7 @@ public:
             response = std::tolower(static_cast<unsigned char>(response));
             response == 'y' ? students.erase(it, students.end()), std::cout << "\nStudent deleted successfully.\n" : std::cout << "\nDeletion cancelled.\n";
         } else {
-            std::cout << "Student with ID " << id << " not found.\n";
+            throw invalid_argument("Student not found. Please try again!");
         }
     }
 
